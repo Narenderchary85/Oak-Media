@@ -5,6 +5,8 @@ import MyLinks from './components/links/MyLinks'
 import NoticationPage from './components/notifications/NoticationPage'
 import ProfilePage from './components/profile/ProfilePage'
 import Chatpage from './components/chat/Chatpage';
+import Signup from './components/Signup';
+import Login from './components/Login';
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
           <Route path='/mylinks' element={<MyLinks/>}/>
           <Route path='/notifications' element={<NoticationPage/>}/>
           <Route path='/mychat' element={<Chatpage/>}/>
+          <Route path='/sign' element={<Signup/>}/>
+          <Route path='/login' element={<Login/>}/>
       </Routes>
     </div>
   )
