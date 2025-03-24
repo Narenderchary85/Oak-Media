@@ -10,7 +10,13 @@ import {Link} from 'react-router'
 const SideBar = () => {
   return (
     <div className='hidden lg:block border-2 border-gray-200 lg:w-85 lg:h-200 bg-white ml-5 mt-8 rounded-[15px]'>
-    <Link to='/'><SiLoop className="w-20 h-20 text-orange-500 mt-5 ml-9" /></Link>
+    <Link to='/'>
+    <div className='flex'>
+      <SiLoop className="w-18 h-18 text-orange-500 mt-5 ml-9" />
+      <div className="hidden lg:block text-4xl font-bold bg-gradient-to-r from-orange-400 
+                          to-red-500 bg-clip-text text-transparent justify-inline mt-12 
+          ">ak-Media</div>
+    </div></Link>
     <Link to='/'>
     <div className='flex w-70 h-15 rounded-[10px] items-center 
     mt-13 ml-8 cursor-pointer bg-gray-200 hover:scale-110  transition-transform duration-300 ease-in-out'>

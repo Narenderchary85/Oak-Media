@@ -14,19 +14,18 @@ const validateToken = (req, res, next) => {
   
     const token = authHeader.split(" ")[1];
     try {
-      const decoded = jwt.verify(token, secretkey);
-  
-      if (!decoded.userId || typeof decoded.userId !== "string") {
+      const decoded = jwt.verify(token, Skey);
+      if (!decoded.id || typeof decoded.id !== "string") {
         return res.status(400).json({ message: "Invalid user ID format in token" });
       }
   
-      req.userId = decoded.userId;
+      req.userId = decoded.id;
       next();
     } catch (error) {
       console.error("Token verification failed:", error);
       return res.status(401).json({ message: "Token is invalid or expired" });
     }
-  };
+}
 
 router.post("/signin", async (req, res) => {
   try {
@@ -94,10 +93,11 @@ const storage=multer.diskStorage({
 
 const uploads=multer({storage:storage});
 
-router.put('/update-profile/:id',uploads.single("profilePicture"),async(req,res)=>{
+router.put('/update-profile',uploads.single("profilePicture"),validateToken,async(req,res)=>{
     try{
-        const userId=req.params.id;
+        const userId=req.userId;
         const updateFields=req.body;
+        console.log(userId);
 
         if(req.file){
             updateFields.profilePicture=`/uploads/${req.file.filename}`

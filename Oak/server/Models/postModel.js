@@ -11,7 +11,7 @@ const PostSchema=mongoose.Schema({
     comments:[],
     share:[],
 },{
-    timestapm:true
+    timestapms:true
 })
 
 const PostModel=mongoose.model("PostSchema",PostSchema);
