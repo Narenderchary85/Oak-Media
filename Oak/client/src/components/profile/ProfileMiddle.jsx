@@ -92,7 +92,7 @@ const ProfileMiddle = () => {
                             <img src={use.profilePicture ? `http://localhost:1000${use.profilePicture}` : profileimg} alt="" className='w-15 h-15 rounded-full absolute top-5 left-6'/>
                             <div className='text-[22px] font-[500] mt-3 ml-20 flex'>
                               {use.username}
-                            <div className='text-[15px] font-[400] mt-1 ml-5'>{formatTimeAgo(use.createdAt)}</div>
+                            <div className='text-[15px] font-[400] mt-1 ml-5'>{formatTimeAgo(use.updatedAt)}</div>
                             </div>
                             </>
                           ))

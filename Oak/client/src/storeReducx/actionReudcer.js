@@ -1,4 +1,4 @@
-import { USER_DETAILS,USER_DETAILS_FAILED,POP_POST,UPLOAD_POST, GET_POSTS_OF_USER, OPEN_EDIT, FOLLOWERS_COUNT, ALL_USERS } from "./actionType";
+import { USER_DETAILS,USER_DETAILS_FAILED,POP_POST,UPLOAD_POST, GET_POSTS_OF_USER, OPEN_EDIT, FOLLOWERS_COUNT, ALL_USERS, UNFOLLOWERS_COUNT, ALL_POSTS } from "./actionType";
 import axios from "axios";
 
 export const allUsersDetails=(token)=>async(dispatch)=>{
@@ -8,6 +8,18 @@ export const allUsersDetails=(token)=>async(dispatch)=>{
         });
         dispatch({
             type:ALL_USERS,
+            payload:response.data
+        })
+    }catch(err){
+        console.log(err.message)
+    }
+}
+
+export const allposts=()=>async(dispatch)=>{
+    try{
+        const response= await axios.get('http://localhost:1000/post/getallpost');
+        dispatch({
+            type:ALL_POSTS,
             payload:response.data
         })
     }catch(err){
@@ -113,16 +125,20 @@ export const openEdit=(prop)=>(dispatch)=>{
     }
 }
 
-export const followUser=(otherId,token)=>async (dispatch)=>{
-    try{
-        const response= await axios.put(`http://localhost:1000/user/follow/${otherId}`,{},{
-            headers:{ Authorization:`Bearer ${token}` }
-        });
+export const toggleFollowUser = (otherId, token, isFollowing) => async (dispatch) => {
+    try {
+        const url = isFollowing
+            ? `http://localhost:1000/user/unfollow/${otherId}`
+            : `http://localhost:1000/user/follow/${otherId}`;
+
+        await axios.put(url, {}, { headers: { Authorization: `Bearer ${token}` } });
+
         dispatch({
-            type:FOLLOWERS_COUNT,
-            payload:otherId
-        })
-    }catch(err){
-        console.log(err.message)
+            type: isFollowing ? UNFOLLOWERS_COUNT : FOLLOWERS_COUNT,
+            payload: otherId,
+        });
+    } catch (err) {
+        console.log(err.message);
     }
-}
+};
+

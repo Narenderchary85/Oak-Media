@@ -1,4 +1,5 @@
 export const ALL_USERS="ALL_USERS";
+export const ALL_POSTS="ALL_POSTS";
 export const USER_DETAILS="USER_DETAILS";
 export const USER_DETAILS_FAILED="USER_DETAILS_FAILED";
 export const POP_POST="POP_POST";
@@ -6,4 +7,4 @@ export const UPLOAD_POST="UPLOAD_POST";
 export const GET_POSTS_OF_USER="GET_POSTS_OF_USER";
 export const OPEN_EDIT="OPEN_EDIT";
 export const FOLLOWERS_COUNT="FOLLOWERS_COUNT";
-export const FOLLOWING_COUNT="FOLLOWING_COUNT";
+export const UNFOLLOWERS_COUNT="FOLLOWING_COUNT";

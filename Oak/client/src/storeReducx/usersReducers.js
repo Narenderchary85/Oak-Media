@@ -1,4 +1,4 @@
-import { ALL_USERS, FOLLOWERS_COUNT, USER_DETAILS,USER_DETAILS_FAILED } from "./actionType";
+import { ALL_USERS, FOLLOWERS_COUNT, UNFOLLOWERS_COUNT, USER_DETAILS,USER_DETAILS_FAILED } from "./actionType";
 
 const initialState={
     allusers:[],
@@ -36,8 +36,23 @@ export const usersReducers=(state=initialState,action)=>{
                                 : [action.payload]
                         }]
                         : state.user, 
-                    followersCount: state.followersCount + 1
+                    followersCount: state.followerCount + 1
                 };
+            
+            case UNFOLLOWERS_COUNT:
+                return {
+                    ...state,
+                    user: state.user.length > 0
+                        ? [{
+                            ...state.user[0],
+                            followers: state.user[0].followers
+                                ? state.user[0].followers.filter(id => id !== action.payload) 
+                                : []
+                        }]
+                        : state.user, 
+                    followersCount: state.followerCount - 1
+                };
+            
         default:
             return state;
     }

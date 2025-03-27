@@ -1,6 +1,7 @@
-import { GET_POSTS_OF_USER, OPEN_EDIT, POP_POST, UPLOAD_POST } from "./actionType";
+import { ALL_POSTS, GET_POSTS_OF_USER, OPEN_EDIT, POP_POST, UPLOAD_POST } from "./actionType";
 
 const initialState={
+    allposts:[],
     userposts:[],
     posts:[],
     open:false,
@@ -10,6 +11,11 @@ const initialState={
 
 export const postReducers=(state=initialState,action)=>{
     switch(action.type){
+        case ALL_POSTS:
+            return {
+                ...state,
+                allposts:Array.isArray(action.payload) ? action.payload : [action.payload]
+            }
         case POP_POST:
             return{
                 ...state,

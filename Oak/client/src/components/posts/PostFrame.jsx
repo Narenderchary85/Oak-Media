@@ -56,7 +56,9 @@ const PostFrame = () => {
              border-2 border-gray-200' onClick={()=>dispatch(popPost(true))}>
              {
               user.map((use)=>(
-                <img src={use.profilePicture ? `http://localhost:1000${use.profilePicture}` : profileimg} alt=""  className='w-20 h-20 rounded-full top-5 left-4 absolute'/>
+                <div key={use._id}>
+                <img src={use.profilePicture ? `http://localhost:1000${use.profilePicture}` : profileimg} alt=""  className='w-20 h-21 rounded-full top-5 left-4 absolute'/>
+                </div>
               ))
              }
               <input type="text" className='border-none w-90 focus:outline-none focus:ring-2 focus:ring-orange-400 absolute top-5 
