@@ -27,6 +27,16 @@ const validateToken = (req, res, next) => {
     }
 }
 
+router.get('/allusers',validateToken,async(req,res)=>{
+    try{
+        const userId=req.userId;
+        const users = await UserModel.find({ _id: { $ne: userId } }).select('-password');
+        res.status(200).json(users);
+    }catch(err){
+        res.status(500).json({message:err.message});
+    }
+})
+
 
 router.get('/getuser',validateToken,async(req,res)=>{
     const userId=req.userId;
@@ -38,16 +48,19 @@ router.get('/getuser',validateToken,async(req,res)=>{
     }
 })
 
-router.put('/follow/:id',async(req,res)=>{
+router.put('/follow/:id',validateToken,async(req,res)=>{
     const otherId=req.params.id;
-    const {userId}=req.body;
+    const userId=req.userId;
     try{
         const user=await UserModel.findById(userId);
         const otheruser=await UserModel.findById(otherId)
         if(!user.following.includes(otherId)){
             await user.updateOne({$push:{following:otherId}});
             await otheruser.updateOne({$push:{followers:userId}});
-            res.status(200).json("User followed!");
+            res.status(200).json({ 
+                message: "User followed!", 
+                followers: otheruser.followers 
+            });
         }else {
             res.status(403).json("User is Already followed by you");
           }
@@ -56,13 +69,13 @@ router.put('/follow/:id',async(req,res)=>{
     }
 });
 
-router.put('/unfollow/:id',async(req,res)=>{
+router.put('/unfollow/:id',validateToken,async(req,res)=>{
     const otherId=req.params.id;
-    const {userId}=req.body;
+    const userId=req.userId;
     try{
         const user=await UserModel.findById(userId);
         const otheruser=await UserModel.findById(otherId)
-        if(!user.following.includes(otherId)){
+        if(user.following.includes(otherId)){
             await user.updateOne({$pull:{following:otherId}});
             await otheruser.updateOne({$pull:{followers:userId}});
             res.status(200).json("User Unfollowed!");

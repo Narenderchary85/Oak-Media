@@ -37,7 +37,7 @@ const UserSchema=mongoose.Schema({
     saved:[],
     tagged:[],
     followers:[],
-    following:[]
+    following:[],
 },{
     timestamps:true
 })

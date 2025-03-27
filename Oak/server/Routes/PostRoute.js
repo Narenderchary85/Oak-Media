@@ -136,5 +136,14 @@ router.put('/savepost/:id',async(req,res)=>{
     }
 });
 
+router.get('/getallpost',async(req,res)=>{
+    try{
+        const post=await PostModel.find();
+        res.status(200).json(post)
+    }catch(err){
+        console.log(err.message);
+    }
+})
+
 
 export default router;

@@ -10,8 +10,9 @@ const PostSchema=mongoose.Schema({
     likes:[],
     comments:[],
     share:[],
+    postCount:Number
 },{
-    timestapms:true
+    timestamps:true
 })
 
 const PostModel=mongoose.model("PostSchema",PostSchema);
