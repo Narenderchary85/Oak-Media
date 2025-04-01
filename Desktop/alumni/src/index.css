@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+/* index.css */
+:root {
+  --custom-gray: #edf0f5;
+  --custom-fw: 500;
+  --custom-fs: 25px;
+  --custom-fc: rgba(0, 0, 0, 0.826);
+  --custom-fww: 400;
+  --custom-fss: 20px;
+  --custom-fcc: rgba(0, 0, 0, 0.663);
+  --over:none
+}
+
+.bg-custom-gray {
+  background-color: var(--custom-gray);
+}
+
+.font-custom-fw {
+  font-weight: var(--custom-fw);
+  font-size: var(--custom-fs);
+  color: var(--custom-fc);
+}
+
+.font-custom-fww {
+  font-weight: var(--custom-fww);
+  font-size: var(--custom-fss);
+  color: var(--custom-fcc);
+}
+
+body{
+  background-color: #edf0f5;
+}
+
+.custom-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.custom-scroll {
+  -ms-overflow-style: --var(--over);  
+  scrollbar-width: none;  
+}
