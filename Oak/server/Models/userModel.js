@@ -27,7 +27,6 @@ const UserSchema=mongoose.Schema({
     },    
     desc:{
         type:String,
-        required:true
     },
     profilePicture:String,
     coverPicture:String,
