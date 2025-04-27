@@ -1,115 +1,186 @@
-import React, { useEffect } from 'react'
-import bgimg from '../../assets/de_bg_image.png';
-import profileimg from '../../assets/profileimg.avif';
-import { PiGridNineLight } from "react-icons/pi";
-import { CiBookmark } from "react-icons/ci";
-import { PiOctagonThin } from "react-icons/pi";
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { FiGrid, FiBookmark } from 'react-icons/fi';
+import {PiTagChevronFill} from 'react-icons/pi';
+import { RiSettings4Line } from 'react-icons/ri';
+import { IoMdAdd } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
-import PostFrame from '../posts/PostFrame';
 import { getPostOfUser, openEdit } from '../../storeReducx/actionReudcer';
 import moment from 'moment';
+import PostFrame from '../posts/PostFrame';
 
 const ProfileMiddle = () => {
-  const user=useSelector(state=>state.users.user);
-  const post=useSelector(state=>state.posts.userposts);
-  const dispatch=useDispatch();
-  const token=localStorage.getItem('token');
+  const user = useSelector(state => state.users.user);
+  const posts = useSelector(state => state.posts.userposts);
+  const dispatch = useDispatch();
+  const token = localStorage.getItem('token');
+  const [activeTab, setActiveTab] = useState('posts');
+  const [isFollowing, setIsFollowing] = useState(false);
 
-  useEffect(()=>{
-    dispatch(getPostOfUser(token))
-  })
+  useEffect(() => {
+    dispatch(getPostOfUser(token));
+  }, [dispatch, token]);
 
   const formatTimeAgo = (timestamp) => {
     return moment(timestamp).fromNow();
   };
 
+  const tabs = [
+    { id: 'posts', icon: <FiGrid />, label: 'POSTS' },
+    { id: 'saved', icon: <FiBookmark />, label: 'SAVED' },
+    { id: 'tagged', icon: <PiTagChevronFill />, label: 'TAGGED' },
+  ];
+
   return (
-    <div className='overflow-y-auto whitespace-nowrap lg:h-230 custom-scroll'>
-      {
-        user.length>0 ? (
-          user.map((use)=>(
-            <div className=' w-150 h-70  ml-6 lg:ml-5 mt-9  lg:w-250 lg:h-110 bg-coustom-gray rounded-[15px] relative' key={use._id}>
-            <img src={bgimg} alt="" className='w-140 h-50 ml-3  lg:w-250 lg:h-70 rounded-tl-[15px] rounded-tr-[15px] object-cover'/>
-            <div className='w-130 h-50 ml-10 top-30 lg:w-220 lg:h-60 bg-white absolute lg:top-40 lg:left-10 rounded-[15px]  border-2 border-gray-200'>
-            <div className='w-80 h-30 ml-45 mt-3 lg:w-130 lg:h-25 lg:ml-70 mt-3 flex relative '>
-                <div className='text-[23px] mt-2 font-[500] lg:text-[30px] lg:font-[500]'>{use.username}</div>
-                <div className='w-30 h-10 bg-gray-300 ml-10 rounded-[10px] lg:ml-10 flex mt-3 text-orange-500 cursor-pointer
-                 justify-center items-center text-[18px] font-[500]' onClick={()=>dispatch(openEdit(true))}>Edit profile</div>
-                  <div className='hidden lg:block w-30 h-10 bg-gray-300 rounded-[10px] p-2 lg:ml-10 flex mt-3 text-orange-500
-                 justify-center items-center text-[18px] font-[500] cursor-pointer'>View profile</div>
-                  <div className='lg:w-130 lg:h-30 absolute lg:ml-70 top-15 right-0'>
-                    <div className='text-[23px] font-[400] text-gray-500'>{use.desc}</div>
-                    <div className='flex mt-5'>
-                      <div className='text-[20px] lg:text-[25px] font-[600]'>{use.numposts >0 ? use.numposts : 0}</div>
-                      <div className='text-[20px] lg:text-[25px] font-[400] ml-2 text-gray-500'>posts</div>
-                      <div className='text-[20px] lg:text-[25px] font-[600] ml-5 lg:ml-7 '>{use.followers >0 ? use.followers : 0}</div>
-                      <div className='text-[20px] lg:text-[25px] font-[400] ml-2 text-gray-500'>Followers</div>
-                      <div className='text-[20px] lg:text-[20px] lg:text-[25px] font-[600] ml-5 lg:ml-7'>{use.following >0 ? use.following : 0}</div>
-                      <div className='text-[20px] lg:text-[25px] font-[400] ml-2 text-gray-500'>Following</div>
-                    </div>
-                  </div>
-              </div>
-              <div className='flex justify-center items-center w-20 h-20 bottom-6 left-12
-               lg:w-25 lg:h-25 bg-gray-200 rounded-full text-[50px] text-gray-500 font-[500] 
-              absolute lg:top-32 lg:left-23 border-3 border-gray-300'>
-                <div className='mb-3 mr-1'>+</div>
-              </div>
-            </div>
-            <div className='absolute w-35 h-35 top-15 left-15 lg:w-52 lg:h-50 rounded-full lg:top-20 lg:left-30 border-5 border-white'>
-              <img src={use.profilePicture ? `http://localhost:1000${use.profilePicture}` : profileimg} alt="" className='w-35 h-33  lg:w-52 lg:h-50 rounded-full'/>
-            </div>
-           </div>
-          ))
-        ):(<></>)
-      }
-            <div className='mt-15 lg:ml-20 lg:mt-0'>
-              <PostFrame/>
-            </div>
-             <hr className='w-146 mt-5 ml-5 lg:w-250 text-gray-400 lg:ml-10 lg:mt-8'/>
-             <div className='w-148 lg:w-250 lg:h-auto bg-white rounded-[20px] lg:ml-9 lg:mt-8 mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6 p-4'>
-                <div className='col-span-2 p-3 flex justify-between items-center'>
-                    <div className='flex items-center'>
-                        <PiGridNineLight className='w-8 h-8 text-orange-500'/>
-                        <div className='text-[20px] ml-2 font-[500] text-gray-600'>Posts</div>
-                    </div>
-                    <div className='flex items-center'>
-                        <CiBookmark className='w-7 h-7 text-orange-500'/>
-                        <div className='text-[20px] ml-2 font-[500] text-gray-600'>Saved</div>
-                    </div>
-                    <div className='flex items-center'>
-                        <PiOctagonThin className='w-7 h-7 text-orange-500'/>
-                        <div className='text-[20px] ml-2 font-[500] text-gray-600'>Tagged</div>
-                    </div>
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="max-w-4xl mx-auto pb-20"
+    >
+      {/* Profile Header */}
+      {user.length > 0 && user.map((use) => (
+        <div key={use._id} className="px-4 lg:px-0">
+          {/* Profile Info Section */}
+          <div className="flex flex-col lg:flex-row items-center lg:items-start py-6">
+            {/* Profile Picture */}
+            <motion.div 
+              whileHover={{ scale: 1.05 }}
+              className="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-white shadow-md overflow-hidden mb-4 lg:mb-0 lg:mr-10"
+            >
+              <img 
+                src={use.profilePicture ? `http://localhost:1000${use.profilePicture}` : profileimg} 
+                alt="Profile" 
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
+
+            {/* Profile Details */}
+            <div className="flex-1">
+              <div className="flex flex-col lg:flex-row lg:items-center mb-4">
+                <h1 className="text-2xl font-light mb-2 lg:mb-0 lg:mr-6">{use.username}</h1>
+                <div className="flex space-x-2">
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    className={`px-4 py-1 rounded-md text-sm font-medium ${isFollowing ? 'bg-gray-100 text-black' : 'bg-blue-500 text-white'}`}
+                    onClick={() => setIsFollowing(!isFollowing)}
+                  >
+                    {isFollowing ? 'Following' : 'Follow'}
+                  </motion.button>
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    className="px-4 py-1 rounded-md text-sm font-medium bg-gray-100"
+                    onClick={() => dispatch(openEdit(true))}
+                  >
+                    Edit Profile
+                  </motion.button>
+                  <button className="p-2 rounded-md bg-gray-100">
+                    <RiSettings4Line />
+                  </button>
                 </div>
+              </div>
 
-                {
-                  post.length > 0 ?(
-                      post.map((pos)=>(
-                        <div className='border-2 border-gray-300 h-140 lg:w-full bg-white mt-5 rounded-[20px] relative p-5' key={pos._id}>
-                        {
-                          user.map((use)=>(
-                            <>
-                            <img src={use.profilePicture ? `http://localhost:1000${use.profilePicture}` : profileimg} alt="" className='w-15 h-15 rounded-full absolute top-5 left-6'/>
-                            <div className='text-[22px] font-[500] mt-3 ml-20 flex'>
-                              {use.username}
-                            <div className='text-[15px] font-[400] mt-1 ml-5'>{formatTimeAgo(use.updatedAt)}</div>
-                            </div>
-                            </>
-                          ))
-                        }
-                        <div className='text-[18px] font-[400] mt-1 ml-20'>{pos.desc}</div>
-                        <div>
-                            <img src={pos.image ? `http://localhost:1000${pos.image}` : profileimg} alt="" className='w-full lg:w-110 lg:h-105 mt-5  rounded-[20px]'/>
-                        </div>
-                    </div>
-                    
-                      ))
-                  ):(<></>)
-                }
+              {/* Stats */}
+              <div className="flex justify-between lg:justify-start lg:space-x-10 mb-4">
+                <div className="text-center lg:text-left">
+                  <span className="font-semibold">{use.numposts > 0 ? use.numposts : 0}</span> posts
+                </div>
+                <div className="text-center lg:text-left">
+                  <span className="font-semibold">{use.followers > 0 ? use.followers : 0}</span> followers
+                </div>
+                <div className="text-center lg:text-left">
+                  <span className="font-semibold">{use.following > 0 ? use.following : 0}</span> following
+                </div>
+              </div>
+
+              {/* Bio */}
+              <div className="mb-4">
+                <h2 className="font-semibold">{use.username}</h2>
+                <p className="text-gray-800">{use.desc || 'No bio yet'}</p>
+              </div>
             </div>
+          </div>
 
-    </div>
-  )
-}
+          {/* Stories Highlights */}
+          <div className="flex space-x-4 py-4 border-y border-gray-200 mb-6 overflow-x-auto">
+            {[...Array(5)].map((_, i) => (
+              <motion.div 
+                key={i}
+                whileHover={{ scale: 1.05 }}
+                className="flex flex-col items-center space-y-1 flex-shrink-0"
+              >
+                <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center">
+                  <IoMdAdd className="text-xl" />
+                </div>
+                <span className="text-xs">New</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      ))}
 
-export default ProfileMiddle
+      {/* Post Frame */}
+      <div className="px-4 lg:px-0">
+        <PostFrame />
+      </div>
+
+      {/* Tabs */}
+      <div className="border-t border-gray-200">
+        <div className="flex justify-center">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              className={`flex items-center justify-center py-4 px-6 relative ${activeTab === tab.id ? 'text-black' : 'text-gray-500'}`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              <span className="text-xl mr-2">{tab.icon}</span>
+              <span className="text-xs tracking-wider">{tab.label}</span>
+              {activeTab === tab.id && (
+                <motion.div 
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-black"
+                  layoutId="underline"
+                />
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Posts Grid */}
+      <div className="grid grid-cols-3 gap-0.5">
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <motion.div 
+              key={post._id}
+              whileHover={{ opacity: 0.9 }}
+              className="aspect-square relative bg-gray-100"
+            >
+              <img 
+                src={post.image ? `http://localhost:1000${post.image}` : profileimg} 
+                alt="Post" 
+                className="w-full h-full object-cover"
+              />
+              {/* Post Hover Overlay */}
+              <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-200">
+                <div className="flex items-center text-white font-semibold mr-4">
+                  <span className="text-lg mr-1">❤️</span>
+                  <span>{post.likes?.length || 0}</span>
+                </div>
+                <div className="flex items-center text-white font-semibold">
+                  <span className="text-lg mr-1">💬</span>
+                  <span>{post.comments?.length || 0}</span>
+                </div>
+              </div>
+            </motion.div>
+          ))
+        ) : (
+          <div className="col-span-3 py-20 text-center text-gray-500">
+            No posts yet
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+};
+
+export default ProfileMiddle;
