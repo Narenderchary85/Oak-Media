@@ -1,128 +1,306 @@
-import React,{useState} from "react";
-import {Link,Navigate} from 'react-router';
-import { SiLoop } from "react-icons/si";
-import axios from "axios";
+import React, { useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import axios from 'axios';
+import { FiUser, FiMail, FiLock } from 'react-icons/fi';
+import { SiLoop } from 'react-icons/si';
 
 const Signup = () => {
-      const [isSign,setSign]=useState({
-          firstname:'',
-          lastname:'',
-          username:'',
-          email:'',
-          password:''
-      });
-      const [Signed,setSigned]=useState(false);
-  
-      const handlerChange = (e) => {
-          const { name, value } = e.target;
-          setSign((prevUser) => ({
-            ...prevUser,
-            [name]: value
-          }));
-        };
+  const [signupData, setSignupData] = useState({
+    firstname: '',
+    lastname: '',
+    username: '',
+    email: '',
+    password: '',
+  });
+  const [signed, setSigned] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-        const submitHandler=async(e)=>{
-          e.preventDefault()
-          try{
-              const response= await axios.post('http://localhost:1000/auth/signin',isSign);
-              const { token,user} = response.data; 
-              setSigned(true);
-              if (token) {
-                localStorage.setItem("token", token); 
-                localStorage.setItem("userId",user)
-                console.log(user,token)
-              } else {
-                alert("Login failed: Token not received");
-              }
-          }catch(err){
-              console.log(err.message)
-          }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSignupData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await axios.post('http://localhost:1000/auth/signin', signupData);
+      const { token, user } = response.data;
+
+      if (token) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId', user);
+        setSigned(true);
+      } else {
+        setError('Signup failed: Token not received');
       }
-
-    if(Signed){
-        return <Navigate to='/'/>
+    } catch (err) {
+      setError(err.response?.data?.message || 'Signup failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
-      
-  
+  };
+
+  if (signed) {
+    return <Navigate to="/" />;
+  }
+
   return (
-    <div className="flex items-center justify-center h-screen gap-16 relative bg-gray-100">
-      <div className="flex flex-col items-center justify-center gap-8">
-       <SiLoop className="w-20 h-20 text-orange-500 mt-5 ml-0" />
-        <div className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
-          Oak-Media
-        </div>
-      </div>
-
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-semibold text-center mb-4">Sign Up</h2>
-        <form className="flex flex-col gap-4" onSubmit={submitHandler}>
-          <div className="flex flex-col">
-            <label className="text-gray-700">First Name</label>
-            <input
-              name="firstname"
-              type="text" onChange={handlerChange}
-              placeholder="Enter first name" value={isSign.firstname}
-              className="p-2 bg-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-gray-700">Last Name</label>
-            <input
-              name="lastname"
-              type="text" onChange={handlerChange}
-              placeholder="Enter last name" value={isSign.lastname}
-              className="p-2 bg-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-gray-700">Username</label>
-            <input
-              name="username"
-              type="text" onChange={handlerChange}
-              placeholder="Choose a username" value={isSign.username}
-              className="p-2 bg-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-gray-700">Email</label>
-            <input
-              name="email"
-              type="email" onChange={handlerChange}
-              placeholder="Enter email" value={isSign.email}
-              className="p-2 bg-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-gray-700">Password</label>
-            <input
-              name="password"
-              type="password" onChange={handlerChange}
-              placeholder="Enter password" value={isSign.password}
-              className="p-2 bg-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition duration-300"
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-4"
+    >
+      <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+        <motion.div
+          initial={{ x: -50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="text-center md:text-left mb-8 md:mb-0"
+        >
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="flex flex-col items-center md:items-start"
           >
-            Sign Up
-          </button>
+            <div className="flex items-center mb-4">
+              <SiLoop className="w-12 h-12 text-blue-500 mr-2" />
+              <div className="text-5xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent">
+                Oak Media
+              </div>
+            </div>
+            <p className="text-blue-600 text-lg max-w-md">
+              Create an account to connect with your audience through powerful media solutions.
+            </p>
+          </motion.div>
 
-          <p className="text-center text-gray-600">
-            Already have an account?{" "}
-          <Link to='/login'><a className="text-orange-500 hover:underline">
-              Login
-            </a>
-          </Link>
-          </p>
-        </form>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="mt-12 hidden md:block"
+          >
+            <div className="relative w-64 h-64">
+              <motion.div
+                animate={{
+                  rotate: 360,
+                  transition: { duration: 20, repeat: Infinity, ease: 'linear' },
+                }}
+                className="absolute inset-0 border-4 border-blue-200 rounded-full"
+              />
+              <motion.div
+                animate={{
+                  rotate: -360,
+                  transition: { duration: 25, repeat: Infinity, ease: 'linear' },
+                }}
+                className="absolute inset-8 border-4 border-blue-300 rounded-full"
+              />
+              <div className="absolute inset-16 bg-blue-500 rounded-full flex items-center justify-center">
+                <FiUser className="text-white text-4xl" />
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial={{ x: 50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md"
+        >
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-blue-600 mb-2">Create Account</h2>
+            <p className="text-gray-500">Join Oak Media today</p>
+          </div>
+
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-red-50 text-red-600 p-3 rounded-md mb-4 text-sm"
+            >
+              {error}
+            </motion.div>
+          )}
+
+          <form onSubmit={submitHandler} className="space-y-6">
+            <div className="space-y-1">
+              <label htmlFor="firstname" className="text-sm font-medium text-gray-700">
+                First Name
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiUser className="text-gray-400" />
+                </div>
+                <input
+                  id="firstname"
+                  name="firstname"
+                  type="text"
+                  value={signupData.firstname}
+                  onChange={handleChange}
+                  required
+                  className="pl-10 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  placeholder="First name"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label htmlFor="lastname" className="text-sm font-medium text-gray-700">
+                Last Name
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiUser className="text-gray-400" />
+                </div>
+                <input
+                  id="lastname"
+                  name="lastname"
+                  type="text"
+                  value={signupData.lastname}
+                  onChange={handleChange}
+                  required
+                  className="pl-10 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  placeholder="Last name"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label htmlFor="username" className="text-sm font-medium text-gray-700">
+                Username
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiUser className="text-gray-400" />
+                </div>
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  value={signupData.username}
+                  onChange={handleChange}
+                  required
+                  className="pl-10 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  placeholder="Choose a username"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label htmlFor="email" className="text-sm font-medium text-gray-700">
+                Email
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiMail className="text-gray-400" />
+                </div>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={signupData.email}
+                  onChange={handleChange}
+                  required
+                  className="pl-10 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  placeholder="your@email.com"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label htmlFor="password" className="text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiLock className="text-gray-400" />
+                </div>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={signupData.password}
+                  onChange={handleChange}
+                  required
+                  className="pl-10 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+
+            <motion.button
+              type="submit"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              disabled={loading}
+              className={`w-full py-3 px-4 rounded-lg font-medium text-white ${
+                loading ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
+              } transition flex items-center justify-center`}
+            >
+              {loading ? (
+                <>
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Signing up...
+                </>
+              ) : (
+                'Sign Up'
+              )}
+            </motion.button>
+          </form>
+
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">Already have an account?</span>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <Link to="/login">
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full py-2 px-4 border border-gray-300 rounded-lg font-medium text-blue-600 hover:bg-gray-50 transition"
+                >
+                  Sign in
+                </motion.button>
+              </Link>
+            </div>
+          </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
