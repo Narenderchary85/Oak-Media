@@ -16,7 +16,6 @@ const MiddleNot = () => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
-  // Mock notifications data
   useEffect(() => {
     const mockNotifications = [
       {
@@ -108,7 +107,6 @@ const MiddleNot = () => {
 
   return (
     <div className="w-full max-w-3xl mx-auto bg-white rounded-xl shadow-sm overflow-hidden lg:mt-10 lg:ml-10">
-      {/* Header */}
       <div className="bg-blue-50 p-4 border-b border-blue-100 flex items-center justify-between">
         <div className="flex items-center">
           <FiBell className="text-blue-500 text-2xl mr-3" />
@@ -127,7 +125,6 @@ const MiddleNot = () => {
         </button>
       </div>
 
-      {/* Tabs */}
       <div className="flex border-b border-gray-200">
         {[
           { id: 'all', label: 'All' },
@@ -152,7 +149,6 @@ const MiddleNot = () => {
         ))}
       </div>
 
-      {/* Notifications List */}
       <div className="divide-y divide-gray-100 max-h-[600px] overflow-y-auto">
         <AnimatePresence>
           {filteredNotifications.length > 0 ? (
@@ -205,7 +201,6 @@ const MiddleNot = () => {
                   whileTap={{ scale: 0.9 }}
                   className="ml-2 text-gray-400 hover:text-gray-600"
                 >
-                  {/* <HiOutlineDotsHorizontal /> */}
                 </motion.button>
               </motion.div>
             ))
@@ -225,7 +220,6 @@ const MiddleNot = () => {
         </AnimatePresence>
       </div>
 
-      {/* Footer */}
       <div className="p-4 border-t border-gray-200 text-center">
         <button className="text-blue-500 text-sm hover:underline">
           View all notifications
