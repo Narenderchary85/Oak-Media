@@ -49,12 +49,10 @@ const PostCard = ({
                 </button>
             </div>
 
-            {/* Post Content */}
             <div className='px-4 pb-2'>
                 <p className='text-gray-800 mb-4'>{post.desc}</p>
             </div>
 
-            {/* Post Image */}
             {post.image && (
                 <div className='w-full bg-gray-50 flex justify-center'>
                     <img
@@ -65,7 +63,6 @@ const PostCard = ({
                 </div>
             )}
 
-            {/* Post Stats */}
             <div className='px-4 py-2 border-t border-gray-100 flex justify-between text-sm text-gray-500'>
                 <div className='flex items-center'>
                     <div className='flex items-center -space-x-2'>
@@ -79,7 +76,6 @@ const PostCard = ({
                 </div>
             </div>
 
-            {/* Post Actions */}
             <div className='px-4 py-2 border-t border-gray-100 grid grid-cols-3'>
                 <motion.button
                     className={`flex items-center justify-center space-x-2 py-2 rounded-lg ${isLiked ? 'text-blue-500' : 'text-gray-600'} font-medium`}
