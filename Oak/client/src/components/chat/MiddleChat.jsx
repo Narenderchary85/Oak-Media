@@ -106,47 +106,6 @@ const MiddleChat = () => {
       transition={{ duration: 0.3 }}
       className="flex h-full rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 lg:w-full"
     >
-      {/* Chat List Sidebar */}
-      <motion.div 
-        initial={{ width: 300 }}
-        animate={{ width: 300 }}
-        className="hidden lg:block border-r border-gray-100 bg-blue-50"
-      >
-        <div className="p-4 border-b border-gray-200 bg-white">
-          <h2 className="text-xl font-semibold text-gray-800">Messages</h2>
-        </div>
-        <div className="overflow-y-auto h-[calc(100%-60px)]">
-          {chatList.map(chat => (
-            <motion.div
-              key={chat.id}
-              whileHover={{ backgroundColor: 'rgba(240, 248, 255, 1)' }}
-              className={`flex items-center p-3 cursor-pointer ${activeChat.id === chat.id ? 'bg-blue-100' : 'bg-white'}`}
-              onClick={() => setActiveChat(chat)}
-            >
-              <div className="relative mr-3">
-                <img src={chat.avatar} alt={chat.name} className="w-12 h-12 rounded-full object-cover" />
-                {chat.status === 'online' && (
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-center">
-                  <h3 className="font-medium text-gray-800 truncate">{chat.name}</h3>
-                  <span className="text-xs text-gray-500">{chat.time}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <p className="text-sm text-gray-500 truncate">{chat.lastMessage}</p>
-                  {chat.unread > 0 && (
-                    <span className="bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                      {chat.unread}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
 
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
