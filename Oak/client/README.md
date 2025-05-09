@@ -1,12 +1,32 @@
-# React + Vite
+<h1>SignUp Page</h1>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Alt Text](https://github.com/Narenderchary85/Oak-Media/blob/main/Oak/client/public/signup.png)
 
-Currently, two official plugins are available:
+<h1>Login Page</h1>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![Alt Text](https://github.com/Narenderchary85/Oak-Media/blob/main/Oak/client/public/login.png)
 
-## Expanding the ESLint configuration
+<h1>Home Page</h1>
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+![Alt Text](https://github.com/Narenderchary85/Oak-Media/blob/main/Oak/client/public/HomePage.png)
+
+<h1>Chat Page</h1>
+
+![Alt Text](https://github.com/Narenderchary85/Oak-Media/blob/main/Oak/client/public/mychat.png)
+
+<h1>Coonection Page</h1>
+
+![Alt Text](https://github.com/Narenderchary85/Oak-Media/blob/main/Oak/client/public/mylinks.png)
+
+<h1>Notification Page</h1>
+
+![Alt Text](https://github.com/Narenderchary85/Oak-Media/blob/main/Oak/client/public/notifications.png)
+
+<h1>My Profile</h1>
+
+![Alt Text](https://github.com/Narenderchary85/Oak-Media/blob/main/Oak/client/public/profile.png)
+
+
+<h1>Announcement Page</h1>
+
+![Alt Text](https://github.com/Narenderchary85/Oak-Media/blob/main/Oak/client/public/announcements.png)
