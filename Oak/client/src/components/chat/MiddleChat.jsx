@@ -14,14 +14,19 @@ import {
 } from 'react-icons/fi';
 import { IoMdClose } from 'react-icons/io';
 import { BsThreeDotsVertical, BsArrowLeft } from 'react-icons/bs';
+import { useSelector } from 'react-redux';
+import io from "socket.io-client";
 
-const MiddleChat = () => {
-  const [messages, setMessages] = useState([
-    { id: 1, sender: 'user', text: 'Hey there! How are you doing?', time: '10:30 AM', status: 'read' },
-    { id: 2, sender: 'other', text: "I'm good! Working on that project we discussed.", time: '10:32 AM', status: 'read' },
-    { id: 3, sender: 'user', text: 'Need any help with the implementation?', time: '10:33 AM', status: 'read' },
-    { id: 4, sender: 'other', text: 'Actually yes, could you review the API integration?', time: '10:35 AM', status: 'read' },
-  ]);
+const socket = io("http://localhost:1000"); 
+
+const MiddleChat = ({chatId}) => {
+  const [messages, setMessages] = useState([]);
+
+  const alluser=useSelector((state)=>state.users.allusers);
+  const chatuser=alluser.find((u)=>u._id===chatId);
+  const user=useSelector(state=>state.users.user);
+  const userId=user[0]?._id;
+
   const [newMessage, setNewMessage] = useState('');
   const [activeChat, setActiveChat] = useState({
     id: 1,
@@ -34,63 +39,58 @@ const MiddleChat = () => {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Mock chat list
-  const chatList = [
-    { id: 1, name: 'Alex Johnson', lastMessage: 'Could you review the API integration?', time: '10:35 AM', unread: 0, status: 'online', avatar: 'https://randomuser.me/api/portraits/men/32.jpg' },
-    { id: 2, name: 'Sarah Miller', lastMessage: 'Meeting at 3pm tomorrow', time: '9:45 AM', unread: 2, status: 'offline', avatar: 'https://randomuser.me/api/portraits/women/44.jpg' },
-    { id: 3, name: 'James Wilson', lastMessage: 'Please check the latest design', time: 'Yesterday', unread: 0, status: 'online', avatar: 'https://randomuser.me/api/portraits/men/22.jpg' },
-  ];
+  useEffect(() => {
+    try {
+      socket.emit('getChat', { userId1: userId, userId2: chatId });
+  
+      const handleChatData = (data) => {
+        setMessages(data);
+      };
+  
+      const handleChatError = (msg) => {
+        console.error(msg);
+      };
+  
+      const handleMessageReceived = (data) => {
+        setMessages(prev => [...prev, data]);
+      };
+  
+      socket.on('chatData', handleChatData);
+      socket.on('chatError', handleChatError);
+      socket.on('messagereceived', handleMessageReceived);
+  
+      return () => {
+        socket.off('chatData', handleChatData);
+        socket.off('chatError', handleChatError);
+        socket.off('messagereceived', handleMessageReceived);
+      };
+    } catch (err) {
+      console.log(err);
+    }
+  }, [userId, chatId]);
+  
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+  
 
   const handleSendMessage = () => {
     if (newMessage.trim() === '') return;
     
     const newMsg = {
-      id: messages.length + 1,
-      sender: 'user',
-      text: newMessage,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      status: 'sent'
+      senderId: userId,
+      reciverId: chatId,
+      message: newMessage,
+      time: new Date().toLocaleTimeString(),
+      date: new Date().toISOString(),
     };
-    
-    setMessages([...messages, newMsg]);
+
+    socket.emit('usersent', newMsg);
+
     setNewMessage('');
     
-    // Simulate reply after 1-3 seconds
-    setTimeout(() => {
-      setIsTyping(true);
-      setTimeout(() => {
-        const reply = {
-          id: messages.length + 2,
-          sender: 'other',
-          text: getRandomReply(),
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          status: 'read'
-        };
-        setMessages(prev => [...prev, reply]);
-        setIsTyping(false);
-      }, 1500);
-    }, Math.random() * 2000 + 1000);
   };
 
-  const getRandomReply = () => {
-    const replies = [
-      "Sounds good!",
-      "I'll get back to you on that.",
-      "Thanks for letting me know.",
-      "Can we discuss this tomorrow?",
-      "I appreciate your help!",
-      "Let me check and confirm."
-    ];
-    return replies[Math.floor(Math.random() * replies.length)];
-  };
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -104,7 +104,7 @@ const MiddleChat = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="flex h-full rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 lg:w-full"
+      className="flex h-2/3 rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 lg:w-full mt-10 lg:ml-10"
     >
 
       {/* Main Chat Area */}
@@ -115,15 +115,19 @@ const MiddleChat = () => {
             <button className="lg:hidden mr-2 p-1 rounded-full hover:bg-gray-100">
               <BsArrowLeft className="text-gray-600" />
             </button>
-            <div className="relative mr-3">
-              <img src={activeChat.avatar} alt={activeChat.name} className="w-10 h-10 rounded-full object-cover" />
-              {activeChat.status === 'online' && (
-                <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></div>
-              )}
-            </div>
+              <div className="relative mr-3">
+                <img
+                  src={`http://localhost:1000${chatuser.profilePicture}`}
+                  alt={chatuser.firstname}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+                {activeChat.status === 'online' && (
+                  <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></div>
+                )}
+              </div>
             <div>
-              <h3 className="font-medium">{activeChat.name}</h3>
-              <p className="text-xs text-gray-500">{activeChat.role}</p>
+              <h3 className="font-medium">{chatuser.firstname}</h3>
+              <p className="text-xs text-gray-500">{chatuser.desc}</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -140,19 +144,19 @@ const MiddleChat = () => {
         <div className="flex-1 overflow-y-auto p-4 bg-blue-50">
           {messages.map((message) => (
             <motion.div
-              key={message.id}
-              initial={{ opacity: 0, y: message.sender === 'user' ? 10 : -10 }}
+              key={message._id}
+              initial={{ opacity: 0, y: message.senderId === userId ? 10 : -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2 }}
-              className={`flex mb-4 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`flex mb-4 relative ${message.senderId === userId ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${message.sender === 'user' ? 'bg-blue-500 text-white rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none shadow-sm'}`}
+                className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${message.senderId === userId ? 'bg-blue-500 text-white rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none shadow-sm'}`}
               >
-                <p>{message.text}</p>
-                <div className={`flex items-center justify-end mt-1 text-xs ${message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'}`}>
+                <p>{message.message}</p>
+                <div className={`flex items-center justify-end mt-1 text-xs ${message.senderId === userId ? 'text-blue-100' : 'text-gray-500'}`}>
                   <span>{message.time}</span>
-                  {message.sender === 'user' && (
+                  {message.senderId === userId && (
                     <span className="ml-1">
                       {message.status === 'read' ? (
                         <FiCheck className="inline" />
