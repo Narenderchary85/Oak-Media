@@ -137,7 +137,47 @@ const Connections = () => {
         </div>
       )}
     </motion.div>
-
+    {fshow && (
+    <div className="space-y-4 lg:absolute lg:right-15 lg:top-20 lg:w-1/4">
+              <h1 className="text-2xl font-semibold text-gray-800 mb-9">Following</h1>
+          {following.map((person) => (
+            <motion.div
+              key={person.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center"
+            >
+              <img
+                src={profileimg}
+                alt={person.name}
+                className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm mr-4"
+              />
+              <div className="flex-1">
+                <h3 className="font-semibold">{person.name}</h3>
+                <p className="text-sm text-gray-500">{person.role}</p>
+                <p className="text-xs text-blue-500">{person.mutual} mutual connections</p>
+              </div>
+              <div className="flex space-x-2">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-2 text-gray-400 hover:text-gray-600"
+                >
+                  <HiOutlineDotsHorizontal />
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleRemove(person.id)}
+                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium"
+                >
+                  Remove
+                </motion.button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+    )}
     </>
   );
 };
