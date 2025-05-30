@@ -17,32 +17,7 @@ const EditProfile = () => {
         setFile(selectedFile)
     }
 
-    const submitHandler = async () => {
-        if (!file) {
-            console.error("No file selected");
-            return;
-        }
-    
-        try {
-            const formData = new FormData();
-            formData.append("profilePicture", file); 
-    
-            const response = await axios.put(
-                "http://localhost:1000/auth/update-profile",
-                formData,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "multipart/form-data",  
-                    }
-                }
-            );
-    
-            console.log("Response:", response.data);
-        } catch (err) {
-            console.error("Error:", err.response?.data || err.message);
-        }
-    };
+
     
 
   return (
