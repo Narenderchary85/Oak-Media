@@ -10,7 +10,6 @@ const PostCard = ({
     postUser,
     isLiked,
     isSaved,
-    hoveredPost,
     setHoveredPost,
     formatTimeAgo,
     handleLike,
