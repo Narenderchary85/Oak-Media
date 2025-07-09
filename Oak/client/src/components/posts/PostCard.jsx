@@ -26,7 +26,6 @@ const PostCard = ({
             onMouseEnter={() => setHoveredPost(post._id)}
             onMouseLeave={() => setHoveredPost(null)}
         >
-            {/* Post Header */}
             <div className='flex items-center p-4'>
                 <img
                     src={postUser?.profilePicture ? `http://localhost:1000${postUser.profilePicture}` : profileimg}

@@ -38,12 +38,12 @@ const ProfileMiddle = () => {
       transition={{ duration: 0.5 }}
       className="max-w-4xl mx-auto pb-20"
     >
-      {/* Profile Header */}
+
       {user.length > 0 && user.map((use) => (
         <div key={use._id} className="px-4 lg:px-0">
-          {/* Profile Info Section */}
+
           <div className="flex flex-col lg:flex-row items-center lg:items-start py-6">
-            {/* Profile Picture */}
+    
             <motion.div 
               whileHover={{ scale: 1.05 }}
               className="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-white shadow-md overflow-hidden mb-4 lg:mb-0 lg:mr-10"
@@ -55,7 +55,7 @@ const ProfileMiddle = () => {
               />
             </motion.div>
 
-            {/* Profile Details */}
+   
             <div className="flex-1">
               <div className="flex flex-col lg:flex-row lg:items-center mb-4">
                 <h1 className="text-2xl font-light mb-2 lg:mb-0 lg:mr-6">{use.username}</h1>
