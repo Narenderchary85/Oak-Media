@@ -48,6 +48,7 @@ const SideBar = () => {
         </button>
       </div>
 
+
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (

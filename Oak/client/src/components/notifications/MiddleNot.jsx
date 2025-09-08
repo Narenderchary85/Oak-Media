@@ -281,6 +281,7 @@ const MiddleNot = () => {
         <a href="#" className="text-xs text-blue-500 hover:underline">
           Notification Settings
         </a>
+        
       </div>
     </div>
   );

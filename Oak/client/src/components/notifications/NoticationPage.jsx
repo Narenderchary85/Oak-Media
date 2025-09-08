@@ -13,6 +13,7 @@ const NoticationPage = () => {
         return () => window.removeEventListener("resize", handleResize);
       }, []);
 
+      
   return (
     <div className="bg-custom-gray w-full min-h-screen flex sm:flex-col lg:flex-row relative pt-16 md:flex-row">
       <NavBar className=''/>

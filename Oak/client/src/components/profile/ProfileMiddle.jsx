@@ -55,6 +55,7 @@ const ProfileMiddle = () => {
               />
             </motion.div>
 
+
    
             <div className="flex-1">
               <div className="flex flex-col lg:flex-row lg:items-center mb-4">

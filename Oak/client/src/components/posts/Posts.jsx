@@ -13,6 +13,7 @@ const Posts = () => {
     const [savedPosts, setSavedPosts] = useState([]);
     const [hoveredPost, setHoveredPost] = useState(null);
 
+    
     const filteredPosts = posts
     .filter(post => post.userId !== usersId)
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); 

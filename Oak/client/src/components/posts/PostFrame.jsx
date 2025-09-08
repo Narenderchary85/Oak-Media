@@ -84,6 +84,7 @@ const PostFrame = () => {
                     />
                 </div>
             )}
+            
 
             <div className='flex items-center justify-between border-t border-gray-100 pt-3'>
                 <div className='flex space-x-2'>
