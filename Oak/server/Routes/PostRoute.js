@@ -136,6 +136,7 @@ router.put('/savepost/:id',async(req,res)=>{
     }
 });
 
+
 router.get('/getallpost',async(req,res)=>{
     try{
         const post=await PostModel.find();

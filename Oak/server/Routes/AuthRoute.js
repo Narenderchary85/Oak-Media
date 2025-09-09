@@ -91,6 +91,7 @@ const storage=multer.diskStorage({
     filename:(req,file,cb)=>cb(null,Date.now()+'-'+file.originalname)
 });
 
+
 const uploads=multer({storage:storage});
 
 router.put('/update-profile',uploads.single("profilePicture"),validateToken,async(req,res)=>{

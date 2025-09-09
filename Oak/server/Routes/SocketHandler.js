@@ -50,9 +50,9 @@ export function socketHandler(io) {
           });
 
           if (chat) {
-            socket.emit('chatData', chat.messages); // send messages array
+            socket.emit('chatData', chat.messages); 
           } else {
-            socket.emit('chatData', []); // no chat found
+            socket.emit('chatData', []); 
           }
         } catch (err) {
           console.error(err);

@@ -27,6 +27,7 @@ const validateToken = (req, res, next) => {
     }
 }
 
+
 router.get('/allusers',validateToken,async(req,res)=>{
     try{
         const userId=req.userId;
