@@ -110,7 +110,6 @@ const PostCard = ({
             </div>
         </motion.div>
     );
-    
 };
 
 export default PostCard;

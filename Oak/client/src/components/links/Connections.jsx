@@ -89,7 +89,6 @@ const Connections = () => {
         </div>
       )}
 
-
       {activeTab === 'suggestions' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {connections.map((person) => (
@@ -136,6 +135,7 @@ const Connections = () => {
           ))}
         </div>
       )}
+
     </motion.div>
     {fshow && (
     <div className="space-y-4 lg:absolute lg:right-15 lg:top-20 lg:w-1/4">

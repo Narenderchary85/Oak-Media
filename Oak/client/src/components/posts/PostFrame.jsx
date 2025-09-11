@@ -83,8 +83,7 @@ const PostFrame = () => {
                         className="max-w-full max-h-80 object-contain rounded-lg border border-gray-200" 
                     />
                 </div>
-            )}
-            
+            )}       
 
             <div className='flex items-center justify-between border-t border-gray-100 pt-3'>
                 <div className='flex space-x-2'>
